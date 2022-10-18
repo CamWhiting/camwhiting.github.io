@@ -35,7 +35,7 @@ plugins:
   - jekyll-feed
 
 # Set a path/url to a logo that will be displayed instead of the title
-logo: "/img/Curtin University logo.svg"
+logo: "/assets/images/Curtin University logo.svg"
 
 # Enable or disable the site search
 # Supports true (default) or false
@@ -169,8 +169,9 @@ compress_html:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
-#   - .sass-cache/
+ exclude: 
+    - assets
+#   - .sass-cache/images/
 #   - .jekyll-cache/
 #   - gemfiles/
 #   - Gemfile
