@@ -4,6 +4,8 @@
 
 layout: home
 ---
+{% include accordion.html %}
+
 # DBE Makerspace
 
 Welcome to B418 Makerspace, your one stop for all information about the 418:114 Makerspace and equipment within B418. Please click on one of the links below to be redirected to our most common questions or click on the options to your left for further options.
@@ -16,3 +18,18 @@ For booking and induction and learning the safety procedures of the DBE Makerspa
 For support and loaning of digital technology and fabrication please click here.
 ## Exhibitions 🎨
 To see the past, present and future exhibitions shown in B418, please click here.
+
+
+# FAQ
+Find some of our most common questions for the DBE Makerspace here.
+
+
+---
+accordion: 
+  - title: this is item 1
+    content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+  - title: this is item 2
+    content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+---
+
+
