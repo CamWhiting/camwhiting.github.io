@@ -35,7 +35,7 @@ plugins:
   - jekyll-feed
 
 # Set a path/url to a logo that will be displayed instead of the title
-logo: "/assets/images/Curtin University logo.svg"
+logo: "/img/Curtin University logo.svg"
 
 # Enable or disable the site search
 # Supports true (default) or false
