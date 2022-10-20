@@ -2,6 +2,7 @@
 layout: page
 title: About Us
 permalink: /about-us/
+nav_order: 2
 ---
 # About Us
 
