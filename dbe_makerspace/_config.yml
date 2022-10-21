@@ -189,7 +189,3 @@ keep_files:
 include:
 - _equipment
 
-collections:
- accordion:
-  output: true
-
