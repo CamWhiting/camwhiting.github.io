@@ -1,37 +1,18 @@
-<!-- Latest compiled and minified CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> 
-
 <!-- Adding Dropdown Functionality. Allows up to 9 dropdowns -->
-<!-- <script>
-    var numbers = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    number.innerHTML = numbers[counter];
-    counter++;
-  if (counter == numbers.length) {
-    counter = "You cannot add this many dropdowns, you can add more to the variable.";
-  }
-
-
-</script>
-
-
-<div class="accordion accordion-flush" id="accordionFlushExample">
-    {% for item in page.accordion %}
+<div class="accordion accordion" id="accordionFlushExample">
+    {% for accordion in page.accordion %}
         <div class="accordion-item">
-        <h2 class="accordion-header" id="flush-headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        <h2 class="accordion-header" id="flush-heading{{ forloop.index }}" style="margin-top: 0;">
+            <button class="accordion-button collapsed accordion{{ forloop.index }}" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ forloop.index }}" aria-expanded="false" aria-controls="flush-collapseOne">
                 {{ accordion.title }}
             </button>
         </h2>
-        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body"><p>{{ accordion.content | markdownify }}</p></div>
+        <div id="flush-collapse{{ forloop.index }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.index }}" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body" for="accordion{{ forloop.site }}">{{ accordion.content | markdownify }}</div>
         </div>
         </div>
     {% endfor %}
-</div> -->
-
-
-
+</div>
 
 
 
