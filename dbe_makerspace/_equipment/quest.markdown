@@ -4,14 +4,15 @@ title: Oculus Quest 2
 permalink: /quest-2/
 parent: Equipment
 ---
+
 # Oculus Quest 2 - Virtual Headset  
 
 {: .important }
 > Important
 > Before using the Oculus Quest 2 you will be required to read the [read the following safety warnings.](https://scontent.fcbr1-1.fna.fbcdn.net/v/t39.2365-6/31427030_1495419650568346_585719606576939008_n.pdf?_nc_cat=104&ccb=1-7&_nc_sid=489e6e&_nc_ohc=pzFuyXKBtiUAX8lVfr7&_nc_ht=scontent.fcbr1-1.fna&oh=00_AT-vMC-fcrBJyAzSmWKZEgDZXdDfgHiet7N0WK6a_PfLgg&oe=63563446)
 
-![Oculus Headset with Controllers](/assets/images/equipment/oculus_headset.webp)  
 
+![Oculus Headset with Controllers](/assets/images/equipment/oculus_headset.webp)  
 
 | Quantity | Risk Assessment |
 |:-|:-|

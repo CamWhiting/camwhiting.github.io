@@ -6,6 +6,23 @@
 layout: home
 title: Welcome
 nav_order: 1
+ 
+# Card Structure
+card:
+  - title: Book
+    link: https://siso.curtin.edu.au/sodbe/
+    image: /assets/images/bookmark.svg
+    content: For booking equipment and booking an induction, click here.
+
+  - title: Learn
+    link: https://siso.curtin.edu.au/sodbe/
+    image: /assets/images/idea.svg
+    content: Tutorials and instructions how to use equipment, click here
+
+  - title: Talk
+    link: "#contact-us"
+    image: /assets/images/speech-bubble.svg
+    content: For questions and support from the technicians, <br> click here.
 
 # Accordion Structure
 accordion: 
@@ -85,39 +102,7 @@ Welcome to B418 Makerspace, your one stop for all information about the 418:114 
 <br>
 <br>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  <a href="https://siso.curtin.edu.au/sodbe//" style="text-decoration: none; color: #000;">
-    <div class="col">
-      <div class="card">
-        <img src="assets/images/small-image.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Book</h5>
-          <p class="card-text">For booking equipment and booking an induction, click here.</p>
-        </div>
-      </div>
-    </div>
-  </a>
-  <div class="col">
-    <div class="card">
-      <img src="assets/images/small-image.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Learn</h5>
-        <p class="card-text">Tutorials and instructions how to use equipment, click here.</p>
-      </div>
-    </div>
-  </div>
-  <a href="#contact-us" style="text-decoration: none; color: #000;">
-    <div class="col">
-      <div class="card">
-        <img src="assets/images/small-image.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Talk</h5>
-          <p class="card-text">For the Technican team with support, <br>click here.</p>
-        </div>
-      </div>
-    </div>
-    </a>
-</div>
+{% include cards.html %}
 
 # Calendar
 Want to know what's happening at the Makerspace? Find out below:
@@ -129,6 +114,5 @@ Find some of our most common questions for the DBE Makerspace here.
 {% include accordion.html %}
 
 # Contact Us
-Want to know what's happening at the Makerspace? Find out below:
-
-
+Want to know what's happening at the Makerspace? Find out below
+{% include form.html %}
