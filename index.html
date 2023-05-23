@@ -1,76 +1,154 @@
 <!-- npm i -g five-server@latest && five-server --port=8000 -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curtin Exhibition Space</title>
     <meta name="description" content="Curtin Exhibition Space">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://recast-api.donmccurdy.com/aframe-inspector-plugin-recast.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-enviropacks@0.10.0/aframe-enviropacks.js"></script>
-    <script src="https://cdn.rawgit.com/mrturck/aframe-joystick/master/joystick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-enviropacks@0.10.0/aframe-enviropacks.js"></script> 
     <script src="js/highlight.js"></script>
     <script src="js/info-panel.js"></script>
+    <script src="js/joystick.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Viga' rel='stylesheet'>
   </head>
+ 
   <body>
+    <div id="myModal" class="modal-wrapper">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="Title" text="shader: msdf; anchor: left; width: 1.5;">[LIMEN EXHIBITION SPEAKER]</h2>
+        <p id="Description">[LIMEN EXHIBITION SPEAKER DESCRIPTION]</p>
+      </div>
+    </div> 
     <a-scene
-      background="color: #ECECEC" renderer="colorManagement: true; physicallyCorrectLights: true" enviropack-material="shader: auto"
+      vr-mode-ui="enabled: false"
+      renderer="colorManagement: true;" 
       info-message="htmlSrc: #messageText"
-      joystick>
+      loading-screen="dotsColor: white; backgroundColor: black"
+      embed>
       
-      
+      <!-- Asset Section. Code added here can be referenced but won't appear on page -->
       <a-assets>
-        <!--  -->
         <a-entity enviropack="preset: tankfarm"></a-entity>
         
+        
         <!-- Exhibition Space  -->
-        <a-asset-item id="exhibition_space" src="src/mesh/exhibition_space.glb"></a-asset-item>
+        <a-asset-item id="exhibition_space" src="src/mesh/exhibition_space_2.glb"></a-asset-item>
         <a-asset-item id="exhibition_glass" src="src/mesh/exhibition_glass.glb"></a-asset-item>
+        <a-asset-item id="exhibition_scaffolding" src="src/mesh/exhibition_scaffolding.glb"></a-asset-item>
+        <a-asset-item id="exhibition_left" src="src/mesh/screen_left.glb"></a-asset-item>
+        <a-asset-item id="exhibition_right" src="src/mesh/screen_right.glb"></a-asset-item>
+        <a-asset-item id="exhibition_middle" src="src/mesh/screen_middle.glb"></a-asset-item>
+        <a-asset-item id="exhibition_rear" src="src/mesh/screen_rear.glb"></a-asset-item>
+        <a-asset-item id="exhibition_floor" src="src/mesh/screen_floor.glb"></a-asset-item>
+        <video id="floor-video" autoplay loop="true" src="src/video/site-maps.mp4"></video>
+        <video id="left-video" autoplay loop="true" src="src/video/mogumber_moore_river.mp4"></video>
+        <video id="middle-video" autoplay loop="true" src="src/video/wandering_mission.mp4"></video>
+        <video id="rear-video" autoplay loop="true" src="src/video/carrolup-marribank-final-version.mp4"></video>
+        <img id="comp-instructions" src="src/img/computer-ctrls.jpg">
+        <img id="mobile-instructions" src="src/img/mobile-ctrls.jpg">
 
         <!-- Nav Mesh -->
         <a-asset-item id="exhibition_navmesh" src="src/mesh/exhibition_navmesh.glb"></a-asset-item>
 
+    
+        <a-asset-item id="garment_1" src="src/mesh/g1.glb"></a-asset-item> 
 
         <a-asset-item id="messageText" src="message.html"></a-asset-item>
-        <!--
-          Image source: http://www.ghibli.jp/works/kazetachinu/#frame&gid=1&pid=1
-          Image author: Studio Ghibli
-        -->
-        <img id="kazetachinu"/>
-        <img id="kazetachinuPoster" src="https://cdn.aframe.io/examples/ui/kazetachinuPoster.jpg" crossorigin="anonymous"/>
-     
-        <img id="ponyo" src="https://cdn.aframe.io/examples/ui/ponyo.jpg" crossorigin="anonymous"/>
-        <img id="ponyoPoster" src="https://cdn.aframe.io/examples/ui/ponyoPoster.jpg" crossorigin="anonymous"/>
+        
+        <img id="howard" crossorigin="anonymous"/>
+        <img id="howardPoster" src="src/img/howard-riley.jpg" crossorigin="anonymous"/>
+    
+        <img id="dianne" crossorigin="anonymous"/>
+        <img id="diannePoster" src="src/img/dianne-mippy.jpg" crossorigin="anonymous"/>
+
+        <img id="len" crossorigin="anonymous"/>
+        <img id="lenPoster" src="src/img/len-ogilvie.jpg" crossorigin="anonymous"/>
       
-        <img id="karigurashi" src="https://cdn.aframe.io/examples/ui/karigurashi.jpg" crossorigin="anonymous"/>
-        <img id="karigurashiPoster" src="https://cdn.aframe.io/examples/ui/karigurashiPoster.jpg" crossorigin="anonymous"/>
+        <img id="edith" crossorigin="anonymous"/>
+        <img id="edithPoster" src="src/img/edith-de-giambattista.jpg" crossorigin="anonymous"/>
+
+        <img id="garry" crossorigin="anonymous"/>
+        <img id="garryPoster" src="src/img/garry-ryder.jpg" crossorigin="anonymous"/>
+
+        <img id="jennifer" crossorigin="anonymous"/>
+        <img id="jenniferPoster" src="src/img/jennifer-mogridge.jpg" crossorigin="anonymous"/>
+
+        <img id="maisie" crossorigin="anonymous"/>
+        <img id="maisiePoster" src="src/img/maisie-weston.jpg" crossorigin="anonymous"/>
+
+        <img id="stephanie" crossorigin="anonymous"/>
+        <img id="stephaniePoster" src="src/img/stephanie-mippy.jpg" crossorigin="anonymous"/>
+
+        <img id="tim" crossorigin="anonymous"/>
+        <img id="timPoster" src="src/img/tim-flowers.jpg" crossorigin="anonymous"/>
+
+        <img id="tonji" crossorigin="anonymous"/>
+        <img id="tonjiPoster" src="src/img/tonji-hansen.jpg" crossorigin="anonymous"/>
+
+        <!-- Frame Animation -->
         <a-mixin
           id="frame"
           geometry="primitive: plane; width: 0.5783552; height: 0.8192"
           material="color: white; shader: flat"
           animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter"
           animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"
-         ></a-mixin>
-         <a-mixin
+        ></a-mixin>
+        <a-mixin
           id="poster"
           geometry="primitive: plane; width: 0.544768; height: 0.786432"
           material="color: white; shader: flat"
           material="shader: flat"
           position="0 0 0.005"
-         ></a-mixin>
-         <a-mixin
-          id="movieImage"
+        ></a-mixin>
+        <a-mixin
+          id="Image"
           geometry="primitive: plane; width: 1.5; height: 0.81"
-          material="src: #ponyo; shader: flat; transparent: true"
+          material="shader: flat; transparent: true"
           position="0 0.495 0.002"
-         ></a-mixin>
+        ></a-mixin>
+
+        <!-- Checkpoints -->
+        <a-mixin id="checkpoint"></a-mixin>
+        <a-mixin id="checkpoint-hovered" color="#6CEEB5"></a-mixin>
+        
       </a-assets>
 
-      <a-entity gltf-model="#exhibition_space" position="0 -1.525 0"></a-entity>
-      <a-entity nav-mesh="" normal-material="" visible="false" position="0 -1.525 0" gltf-model="#exhibition_navmesh"></a-entity>
-      <a-entity gltf-model="#exhibition_glass" material="opacity:0.5; transparent: true;" position="0 -1.525 0"></a-entity>
+      <!-- Lights  -->
+      <a-light id="spotlights" type="spot" position="2.919 3.952 1.464" rotation="-45.000 90 90" angle="23.740" intensity="2.410" penumbra="1" ></a-light>
+      <a-light id="spotlights" type="spot" position="3.100 3.952 -2.841" rotation="-45.000 90 90" angle="23.740" intensity="2.410" penumbra="1" ></a-light>
+
+      <!-- Messages -->
+      <a-entity 
+        id="warning"
+        position="-3.730 1.493 4.557"
+        rotation="0 90 0"
+        text="wdith: 1.610; anchor: center; baseline: center; wrapCount: 41; transparent: true; opacity: 0.90; color: #FFFFFF; value: Warning: \n This content beyond here contains strong content \n that can relate to sexual assault and abuse. \n Listener's discression is advised.;"
+        geometry="primitive: plane; height: auto; width: auto"
+        material="color: #000000; transparent: true; opacity: 0.80;">
+      </a-entity>
       
+      <!-- Meshes -->
+      <a-entity>
+        <a-entity id="exhibition" gltf-model="#exhibition_space"  position="0 -1.525 0"></a-entity>
+        <a-entity id="scaffolding" gltf-model="#exhibition_scaffolding" material="color: #032225;" renderer="colorManagement: true;"  position="0 -1.525 0"></a-entity>
+        <a-entity id="screen_left" geometry="primitive: plane"  material="color: #FFFFFF; src:#left-video" position="-5.267 2.074 -7.964" rotation="0 -5.688 0" scale="2.791 1.578 1"></a-entity>
+        <a-entity id="screen_middle" geometry="primitive: plane" material="color: #FFFFFF; src:#middle-video" position="-1.556 2.074 -7.589" rotation="0 -5.688 0" scale="2.792 1.571 1"></a-entity>
+        <a-entity id="screen_right" geometry="primitive: plane" material="color: #FFFFFF; src:#right-video" position="5.351 2.077 -8.496" rotation="0 15.733 0" scale="2.595 1.574 1"></a-entity>
+        <a-entity id="screen_rear" geometry="primitive: plane"  material="color: #FFFFFF; src:#rear-video" position="0.467 2.285 5.685" rotation="0 180.000 0" scale="2.792 1.574 1"></a-entity>
+        <a-entity id="screen_floor" geometry="primitive: plane" material="color: #FFFFFF; src:#floor-video" renderer="colorManagement: true;" position="1.391 0 -1.403" rotation="-90.000 0 0" scale="2.793 1.566 1.000"></a-entity>
+        <a-entity id="navmesh" nav-mesh="" normal-material="" visible="false" position="0 -1.525 0" gltf-model="#exhibition_navmesh"></a-entity>
+        <a-entity id="glass" gltf-model="#exhibition_glass" material="opacity:0.5; transparent: true;" position="0 -1.525 0"></a-entity>
+        <!-- <a-entity id="garment_1" gltf-model="#garment_1" material="shader: flat;" renderer="colorManagement: true;" position="4.362 1.236 -4.045"></a-entity> -->
+        <a-box position="4.772 1.381 3.537" scale="0.772 2.770 2.576" material="color: #FFFFFF;"></a-box>
+        <a-image src="#mobile-instructions" ></a-image>
+        <a-image src="#comp-instructions" ></a-image>
+      </a-entity>
+
       <a-entity
         id="background"
         position="0 0 0"
@@ -79,71 +157,92 @@
         scale="0.001 0.001 0.001"
         visible="false" class="raycastable">
       </a-entity>
-
-      <a-entity id="rig" 
-        movement-controls="constrainToNavMesh: true; controls: checkpoint, gamepad, trackpad, keyboard, touch;"
-        position=""
-        rotation=""
-        checkpoint-controls=""
-        gamepad-controls=""
-        trackpad-controls=""
-        keyboard-controls=""
-        touch-controls=""
-        >
-          <a-entity camera id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
-              <a-cursor 
-                material="" 
-                raycaster="objects: .raycastable"
-                geometry="" 
-                position="0 0 -0.1"      
-                scale="0.1 0.1 0.1"/>
-              <a-entity
+      <a-entity id="rig"
+                movement-controls="constrainToNavMesh: true; controls: checkpoint, keyboard"
+                checkpoint-controls="mode: animate"
+                position="6.893 0 3.702"
+                rotation="0 88.121 0">
+        <a-entity id="camera" 
+                  camera
+                  position="0 1.6 0"
+                  look-controls="pointerLockEnabled: true; magicWindowTrackingEnabled: false;"
+                  touch-listener>
+          <a-entity cursor
+                    position="0 0 -0.1"
+                    raycaster="objects: .raycastable"
+                    geometry="primitive: circle; radius: 0.001; "
+                    material="color: #CCC">
+          </a-entity>
+          <a-entity
               id="fadeBackground"
               geometry="primitive: sphere; radius: 2.5"
               material="color: black; side: back; shader: flat; transparent: true; opacity: 0.6" visible="false">
             </a-entity>
-          </a-entity>
+        </a-entity>
       </a-entity>
 
-      <!-- Hand controls -->
-      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .raycastable"></a-entity>
-      <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: .raycastable" line="color: #118A7E"></a-entity>
+        
+        <!-- Checkpoint -->
+        <a-entity>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="6.907 0 3.652" color="#380402"  material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="5.416 0 -6.208" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="1.371 0 2.086" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="1.080 0 -3.995" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-2.587 0 4.783" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-5.100 0 4.783" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-5.100 -1.435 0.584" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-9.212 -1.435 0.584" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-9.212 -1.435 -2.095" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+          <a-cylinder checkpoint radius="0.5" height="0.01" position="-9.212 -1.435 -5.515" color="#380402" material="shader: flat; opacity: 0.5;" class="raycastable"></a-cylinder>
+        </a-entity>
+      
 
       <a-entity id="ui" position="0 1.6 -2.5">
         <!-- Poster menu -->
         <a-entity id="menu" highlight>
-          <a-entity id="karigurashiButton" position="-0.8 0 0" mixin="frame" class="raycastable menu-button">
-            <a-entity material="src: #karigurashiPoster;" mixin="poster"></a-entity>
+          <a-entity id="edithButton" position="-0.686 0 3.363" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #edithPoster;" mixin="poster"></a-entity>
           </a-entity>
 
-          <a-entity id="kazetachinuButton" position="0 0 0" mixin="frame" class="raycastable menu-button">
-            <a-entity material="src: #kazetachinuPoster" mixin="poster"></a-entity>
+          <a-entity id="howardButton" position="-2.416 0.413 0.975" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #howardPoster" mixin="poster"></a-entity>
           </a-entity>
 
-          <a-entity id="ponyoButton" position="0.8 0 0" mixin="frame" class="raycastable menu-button">
-            <a-entity material="src: #ponyoPoster" mixin="poster"></a-entity>
+          <a-entity id="dianneButton" position="-1.580 0.112 4.134" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #diannePoster" mixin="poster"></a-entity>
           </a-entity>
+
+          <a-entity id="lenButton" position="-0.686 0 5.324" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #lenPoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="tonjiButton" position="-2.299 0.413 4.453" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #tonjiPoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="timButton" position="-1.580 0.335 2.522" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #timPoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="stephanieButton" position="-3.995 0.479 0.129" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #stephaniePoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="maisieButton" position="-1.580 0.043 -0.270" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #maisiePoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="jenniferButton" position="-2.111 0.213 -2.034" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #jenniferPoster" mixin="poster"></a-entity>
+          </a-entity>
+
+          <a-entity id="garryButton" position="-3.401 0.311 -1.158" rotation="0 90 0" mixin="frame" class="raycastable menu-button">
+            <a-entity material="src: #garryPoster" mixin="poster"></a-entity>
+          </a-entity>
+
         </a-entity>
-
-        <!-- Info panel of the selected movie. -->
-        <a-entity
-          id="infoPanel"
-          position="0 0 0.5"
-          info-panel
-          visible="false"
-          scale="0.001 0.001 0.001"
-          geometry="primitive: plane; width: 1.5; height: 1.8"
-          material="color: #333333; shader: flat; transparent: false" class="raycastable">
-          <a-entity id="ponyoMovieImage" mixin="movieImage" material="src: #ponyo" visible="false"></a-entity>
-          <a-entity id="kazetachinuMovieImage" mixin="movieImage" material="src: #kazetachinu" visible="false"></a-entity>
-          <a-entity id="karigurashiMovieImage" mixin="movieImage" material="src: #karigurashi" visible="false"></a-entity>
-          <a-entity id="movieTitle"
-            position="-0.68 -0.1 0"
-            text="shader: msdf; anchor: left; width: 1.5; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Ponyo (2003)"></a-entity>
-          <a-entity id="movieDescription"
-            position="-0.68 -0.2 0"
-            text="baseline: top; shader: msdf; anchor: left; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></a-entity>
-        </a-entity>
+        <!-- Info panel of the selected Poster. -->
+        <a-entity id="infoPanel" info-panel visible="false" class="raycastable"></a-entity>
       </a-entity>
     </a-scene>
   </body>
