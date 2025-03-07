@@ -1,36 +1,364 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>MindAR.js Hiro Marker Example</title>
-  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe-mindar.js"></script>
-</head>
-<body style="margin: 0; overflow: hidden;">
-  <a-scene
-    mindar-image="imageTargetSrc: hiro.mind; autoStart: true;"
-    color-space="sRGB"
-    embedded
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: true">
+<html lang="en">
+<!--Remember to upload document to a https: page and not http as there are security risks that will refrain the page access otherwise-->
+  
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Unnamed Game</title>
+        
+        <!-- A-Frame library + Effects -->
+        <script src="js/A-Frame/aframe.min.js"></script>
+        <script src="js/A-Frame/aframe-extra-min.js"></script>
+        <script src="js/A-Frame/aframe-rain.min.js"></script>
+        <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+
+        <!-- Custom CSS/JS -->
+        <link rel="stylesheet" type="text/css" href="css/main.css"> 
+        <script src="js/custom.js"></script>
+    </head>
     
-    <!-- Assets -->
-    <a-assets>
-      <a-asset-item id="model" src="src/house.glb"></a-asset-item>
-    </a-assets>
+    <body>       
+    
+    <!-- Dying/Blacking Out -->  
+    <div id="blackout">
+        <div id="question">
+            <h1 id="highscore">You have died. </h1><br> <p>But who even are you? Did you figure it out? Write your answer below:
+            </p>
+            <input id="answerValue" placeholder="Who are you?"><br>
+            <button type="button" onclick="answer()">Submit</button> <button onClick="window.location.reload();">Retry</button>
+            <p id="answer"></p><br>
+            <h5>If you give up, you can see the correct answer here: <a href="https://en.wikipedia.org/wiki/Ned_Kelly">ANSWER</a></h5>
+        </div>
+    </div>  
+               
+        
+    <!-- stats -->
+    <a-scene 
+        id="theAnswer"     
+        nedkelly-logic
+        rain="splash: false" 
+        renderer="alpha: false;"  
+        background="color: #22251E"
+        vr-mode-ui="enabled: false"
+        gltf-model="dracoDecoderPath: js/DRACO/;"
+    >
+        
+          <!-- Camera Settings. -->   
+        <a-entity 
+          id="cam"
+          position="3.00497 21.37694 14.26701" 
+          rotation="32.00886018277858 -160.30786149965303 2.7118092443541864"
+          >
+            
+            <a-camera   
+                id="a_cam"      
+                position="-1.58721 32.62425 -9.63607" 
+                user-height="2.6" 
+                wasd-controls-enabled="true" 
+                look-controls="pointerLockEnabled: true" 
+                near="0.05"
+                scale="100 100 100"      
+                >
+            <a-entity 
+                id="cursor"      
+                position="0 0 -0.1"      
+                scale="0.001 0.001 0.001"
+                raycaster="objects: .clickable"
+                geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02;"
+                material="color: black; shader: flat; opacity: 0.5"
+                cursor="fuse: true; fuseTimeout: 750"
+                animation="startEvents: fusing; property: scale; dur: 750; from: 0.25 0.25 0.25; to: 0.1 0.1 0.1; easing: easeInOutQuad;">
+                </a-entity>
+                
+                <!-- All internal dialogue -->
+                    <a-entity id="helpText"
+                            class="a-text" 
+                            visible="false"
+                            text="                                  value: 
+                                  Goal: Try to hide in the water to avoid being seen while not running out of air (O2 on right).
+                                  
+                                  Score as high as you can (score in top left)!
+                                  
+                                  Controls:
+                                  > Click - to duck/hide.
+                                  > Mouse - looking around. Look at on object for a few seconds to see internal dialogue
+                                  
+                                  Hover over the start sign for a second to begin game.;
+                                  
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.045 -0.1"
+                            geometry="primitive: plane; width: auto; height: 0.75"
+                            material="color: #000;"
+                            scale="0.085 0.085 0"> </a-entity>
+                
+                    <a-entity id="waterText"
+                            class="a-text" 
+                            visible="false"
+                            text="align: center;
+                                  value: Thank god for the murky waters of Stringybark Creek. Without it I would have been had for sure!;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height: 0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0"> </a-entity>
+                
+                    <a-entity id="death" 
+                              visible="false"
+                              text="align: center;
+                                  value: Agh! Such is life...;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height: 0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0"> </a-entity>
+                
+                   
+                
+                    <a-entity id="policeText" 
+                            class="a-text" 
+                            visible="false"
+                            text="align: center;
+                                  value: Constable Strahan. You'll 'gun us down like dogs', eh? Just you wait...  soon the world will see how corrupt you really are.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height: 0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                  
+         
+                            
+                    <a-entity id="kellyText" 
+                            visible="false" 
+                            class="a-text" 
+                            text="align: center;
+                                  value: Look at me. Soaked, cold and an outlaw. I wonder what my father would think of me if he were alive;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158;"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+         
+                   <a-entity id="backgroundText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: We've got to get out of Wombat Ranges, the police are onto us.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
+                    <a-entity id="helmetText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: Ah, the metal helmet I made. What's it doing here?;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
+                    <a-entity id="fishText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: Murry Cod, native to the area.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
+                    <a-entity id="scarfText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: My sash! My flashy reward for saving my classmate from drowning in Hughes Creek.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
+            </a-camera>
+         </a-entity>
+            
+            
+        
+            <!-- Air Gauge -->
+        <p id="airSymbol">O₂</p>
+        <progress id="air" max="100" value="100"><p><strong>O</strong></p></progress>
 
-    <!-- MindAR System -->
-    <a-entity mindar-image-target="targetIndex: 0">
-      <a-entity
-        position="0 0 0"
-        scale="0.05 0.05 0.05"
-        gltf-model="#model"
-        animation="property: position; to: 0 0.1 0; dir: alternate; loop: true; dur: 1000"
-      ></a-entity>
-    </a-entity>
+            <!-- Score -->
+            <div id="score-bg">
+                <strong class="notSelectable">SCORE
+                    <div id="score">0</div>
+                </strong> 
+            </div>
 
-    <!-- Camera -->
-    <a-camera position="0 0 0"></a-camera>
-  </a-scene>
+        <!-- Asset management system. -->
+        <a-assets>
+            <a-asset-item id="nedkelly-gtlf" src="models/nedKelly-headless.glb" response-type="arraybuffer"></a-asset-item>
+
+            <a-asset-item id="police-gtlf" src="models/police+gun.glb" response-type="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="sign-gtlf" src="models/sign.glb" response-type="arraybuffer"></a-asset-item>
+
+            <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
+
+            <a-asset-item id="lilypad-gtlf" src="models/lilypads.glb" response-type="arraybuffer"></a-asset-item>
+
+            <a-asset-item id="reed-gtlf" src="models/reed.glb" response-type="arraybuffer"></a-asset-item>
+
+            <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="helmet-gtlf" src="models/helmet.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="fish-gtlf" src="models/fish.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="scarf-gtlf" src="models/scarf.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="gun-gtlf" src="models/gun.glb" response-stype="arraybuffer"></a-asset-item>
+
+        </a-assets>
+
+        
+
+        <!-- Lighting -->
+        <a-light type="hemisphere" intensity=".6" light=""></a-light>
+        <a-light id="moon-spot" 
+                 light="distance: 1000; castShadow:true; decay: 0.48; shadowBias: -0.010; shadowCameraNear: 3.870; shadowRadius: -0.6" 
+                 type="spot"
+                 intensity="1.3" 
+                 rotation="-74.1567815081922 179.9998479605043 179.9998479605043" 
+                 position="0 5.939 -6.93838" 
+                 penumbra="0.5"
+                 >
+        </a-light>
+        <a-sky color= "#22251e">
+        </a-sky>
+        
+         <!-- Main Menu UI -->
+        <a-entity 
+                class="title menu"   
+                position= "-0.91994 2.03059 1.15111"
+                rotation= "19.613 -12.149 -1.007"
+                text="value: The Unnamed 
+                        Game;
+                     width: 10.58;
+                     align: center;
+                     anchor: center; "
+                geometry="primitive: plane; width: 3.21; height: 1.24;"
+                material="color: #000;" >
+        </a-entity>
+        
+        
+        <a-entity id="start" class="menu clickable" position="-1.95946 -0.39222 0.02406" rotation="0 17.317649357829133 3.857724834615833" scale="0.553 0.553 0.553" gltf-model="#sign-gtlf" shadow="cast: true" >
+        </a-entity>
+        
+        <a-entity id="help" class="menu clickable" 
+        rotation="8.869959626420275 152.7751853670681 5.42132665752785" scale="0.553 0.553 0.553" position="0.41115 -0.4196 0.07019" gltf-model="#sign-gtlf" shadow="cast: true" 
+        event-set__enter="_event: click; _target: #helpText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #helpText; visible: false">
+        </a-entity>
+        
+
+
+        <!-- Models -->
+        <a-entity id="nedkelly" gltf-model="#nedkelly-gtlf" rotation="0 -180 0" position="-1.353 -1.623 4" scale="0.01 0.01 0.01" animation-mixer>
+        </a-entity>
+        
+        <!-- Plane used for Ned Kelly dialogue. As camera is parented to mesh, if the text were added to Ned Kelly mesh, it would display constantly.-->
+         <a-circle id="nedcollider" class="trigger" position="-1.38981  10.12062" rotation= "-90 0 0" scale="45 45 45" visible="false" 
+        event-set__enter="_event: click; _target: #kellyText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #kellyText; visible: false"></a-circle>
+        
+        <!-- Police Mesh -->
+         <a-entity 
+                    id="police"
+                    gltf-model="#police-gtlf" 
+                    position="-0.434 -0.20594 -0.46" 
+                    rotation="-12.874 170.981 2.449" 
+                    scale="0.007 0.007 0.007" 
+                    shadow="cast: true" 
+                    animation-mixer 
+                   >
+        </a-entity>
+    
+        <!-- Plane used for policeman dialogue. As the character's hit box exported with errors -->
+        <a-plane id="policecollider" class="trigger" scale="0.87781 1.83953 1" rotation="0 -14.805802383975601 0" position="-0.56218 0.60496 0.51596" visible="false" 
+        event-set__enter="_event: click; _target: #policeText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #policeText; visible:  false"></a-plane>
+        
+        
+        <!-- Environment -->
+        <a-entity id="environment" class="trigger" gltf-model="#environment-gtlf" rotation="0 90 0" scale="5.5 5.5 5.5" shadow="cast: true; receive: true"
+        event-set__enter="_event: click; _target: #backgroundText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #backgroundText; visible: false">
+        </a-entity>
+
+            <a-entity id="reed-2" rotation="0 0 -15.05446606706238" scale="0.13941 0.13941 0.13941" position="-3.49988 -0.54034 2.61724" gltf-model="#reed-gtlf">
+            </a-entity>
+
+            <a-entity id="reed-3" scale="0.13941 0.26012 0.13941" rotation="-7.426678940485732 8.703228908037206 11.924397632262693" position="0.51318 -0.91402 2.09461" gltf-model="#reed-gtlf">
+            </a-entity>
+
+            <a-entity id="reed-4" scale="0.13941 0.27371 0.13941" rotation="0 -171.6690416193021 0" position="0.3664 -0.71469 1.69763" gltf-model="#reed-gtlf">
+            </a-entity>
+
+        <a-entity id="lilypad" position="-0.2477 0.01656 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#lilypad-gtlf" animation-mixer="loop:repeat">
+        </a-entity>
+
+        <a-entity id="water" class="trigger" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#water-gtlf" animation-mixer
+        event-set__enter="_event: click; _target: #waterText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #waterText; visible: false">
+        </a-entity>
+        
+        <a-entity id="helmet" class="trigger" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#helmet-gtlf" visible="false" shadow="cast: true"
+        event-set__enter="_event: click; _target: #helmetText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #helmetText; visible: false">
+        </a-entity>
+        
+        <a-entity id="fish" class="trigger" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#fish-gtlf" animation-mixer shadow="cast: true" event-set__enter="_event: click; _target: #fishText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #fishText; visible: false">
+        </a-entity>
+        
+        <a-plane id="scarfcollider" scale="1.27785 1.18068 1.45572" rotation="0 -14.805802383975601 0" position="1.22316 1.44572 -1.25125" visible="false" 
+        event-set__enter="_event: click; _target: #scarfText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #scarfText; visible: false"></a-plane>
+        
+        <a-entity id="scarf" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#scarf-gtlf" visible="false" shadow="cast: true" >
+        </a-entity>
+        
+        <a-entity id="gun" position="-0.2931 -1.54691 3.49407" rotation="1.1562288305740014 -124.25735703002162 76.25667182734665" scale="5.5 5.5 5.5" gltf-model="#gun-gtlf" shadow="cast: true" >
+        </a-entity>
+        
+    </a-scene>
 </body>
-</html>
