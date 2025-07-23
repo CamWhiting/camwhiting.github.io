@@ -20,8 +20,17 @@
   </style>
 </head>
 <body>
-    <p>hello world</p>
-  <ruffle-player src="StatusQuo.swf"></ruffle-player>
-
+    <div id="ruffle-container"></div>
+    <script>
+      window.RufflePlayer = window.RufflePlayer || {};
+      window.addEventListener("DOMContentLoaded", () => {
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        player.style.width = "800px";
+        player.style.height = "600px";
+        document.getElementById("ruffle-container").appendChild(player);
+        player.load({ url: "StatusQuo.swf" }); // Pass as object, not string
+      });
+    </script>
 </body>
 </html>
