@@ -2,9 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>High Five</title>
+<title>Cursors</title>
 <style>
-  body { margin: 0; background: #111; overflow: hidden; }
+  body { margin: 0; background: #111; overflow: hidden; cursor: none; }
   canvas { display: block; }
 </style>
 </head>
@@ -28,22 +28,9 @@ await insertCoin({ gameId: GAME_ID });
 
 onPlayerJoin(state => {
   if (state.id === myPlayer().id) {
-    state.setState("x", mouse.x);
-    state.setState("y", mouse.y);
     state.setState("color", `hsl(${Math.random() * 360}, 70%, 55%)`);
   }
   players.set(state.id, state);
-});
-
-addEventListener("click", () => {
-  const me = myPlayer();
-  for (const [id, p] of players) {
-    const dx = p.getState("x") - me.getState("x");
-    const dy = p.getState("y") - me.getState("y");
-    if (Math.hypot(dx, dy) < 60) {
-      me.setState("highfive", true);
-    }
-  }
 });
 
 function loop() {
@@ -55,15 +42,10 @@ function loop() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (const [id, p] of players) {
-    ctx.beginPath();
-    ctx.arc(p.getState("x"), p.getState("y"), 20, 0, Math.PI * 2);
     ctx.fillStyle = p.getState("color") || "white";
+    ctx.beginPath();
+    ctx.arc(p.getState("x"), p.getState("y"), 6, 0, Math.PI * 2);
     ctx.fill();
-
-    if (p.getState("highfive")) {
-      ctx.font = "24px serif";
-      ctx.fillText("🖐️", p.getState("x") - 12, p.getState("y") - 30);
-    }
   }
 
   requestAnimationFrame(loop);
