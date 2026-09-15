@@ -4,114 +4,68 @@
 <meta charset="utf-8">
 <title>High Five</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; font-family: sans-serif; }
+  body { margin: 0; background: #111; overflow: hidden; }
   canvas { display: block; }
-  #hint { position: fixed; top: 10px; left: 10px; color: #fff; font-size: 14px; opacity: 0.8; }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="hint">WASD or arrow keys to move. Get close to someone and press Space to high five.</div>
 
 <script type="module">
-// If this import fails, check joinplayroom.com's docs for the current CDN URL
-// and swap it in here. The state API below (setState/getState/onPlayerJoin) is
-// the stable part of Playroom Kit.
 import { insertCoin, myPlayer, onPlayerJoin } from "https://esm.sh/playroomkit@latest";
 
-const GAME_ID = "PASTE_YOUR_GAME_ID_HERE"; // get one free at joinplayroom.com
-
+const GAME_ID = "PASTE_YOUR_GAME_ID_HERE";
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
-function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
-resize();
-addEventListener("resize", resize);
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
-const players = new Map(); // playerId -> player state object
-const keys = {};
-addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
-
-const HIGHFIVE_DIST = 60;
-let lastSpace = false;
+const players = new Map();
+const mouse = { x: 400, y: 300 };
+addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
 await insertCoin({ gameId: GAME_ID });
 
 onPlayerJoin(state => {
-  const isMe = state.id === myPlayer().id;
-  if (isMe) {
-    state.setState("x", Math.random() * 400 + 100);
-    state.setState("y", Math.random() * 400 + 100);
-    state.setState("color", `hsl(${Math.floor(Math.random() * 360)},70%,55%)`);
+  if (state.id === myPlayer().id) {
+    state.setState("x", mouse.x);
+    state.setState("y", mouse.y);
+    state.setState("color", `hsl(${Math.random() * 360}, 70%, 55%)`);
   }
   players.set(state.id, state);
-  state.onQuit(() => players.delete(state.id));
 });
 
-function distance(a, b) {
-  const dx = (a.getState("x") || 0) - (b.getState("x") || 0);
-  const dy = (a.getState("y") || 0) - (b.getState("y") || 0);
-  return Math.hypot(dx, dy);
-}
-
-function update() {
+addEventListener("click", () => {
   const me = myPlayer();
-  if (!me) return;
-
-  let x = me.getState("x") || 0;
-  let y = me.getState("y") || 0;
-  const speed = 4;
-  if (keys["arrowup"] || keys["w"]) y -= speed;
-  if (keys["arrowdown"] || keys["s"]) y += speed;
-  if (keys["arrowleft"] || keys["a"]) x -= speed;
-  if (keys["arrowright"] || keys["d"]) x += speed;
-  x = Math.max(20, Math.min(canvas.width - 20, x));
-  y = Math.max(20, Math.min(canvas.height - 20, y));
-  me.setState("x", x);
-  me.setState("y", y);
-
-  const spaceDown = !!keys[" "];
-  if (spaceDown && !lastSpace) {
-    for (const [id, p] of players) {
-      if (id === me.id) continue;
-      if (distance(me, p) < HIGHFIVE_DIST) {
-        me.setState("highfive", Date.now());
-      }
+  for (const [id, p] of players) {
+    const dx = p.getState("x") - me.getState("x");
+    const dy = p.getState("y") - me.getState("y");
+    if (Math.hypot(dx, dy) < 60) {
+      me.setState("highfive", true);
     }
   }
-  lastSpace = spaceDown;
-}
+});
 
-function draw() {
+function loop() {
+  const me = myPlayer();
+  me.setState("x", mouse.x);
+  me.setState("y", mouse.y);
+
   ctx.fillStyle = "#111";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (const [id, p] of players) {
-    const x = p.getState("x") || 0;
-    const y = p.getState("y") || 0;
-    const color = p.getState("color") || "#4af";
-
     ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.fillStyle = color;
+    ctx.arc(p.getState("x"), p.getState("y"), 20, 0, Math.PI * 2);
+    ctx.fillStyle = p.getState("color") || "white";
     ctx.fill();
 
-    ctx.fillStyle = "#fff";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(id.slice(0, 4), x, y - 28);
-
-    const hf = p.getState("highfive");
-    if (hf && Date.now() - hf < 500) {
-      ctx.font = "20px sans-serif";
-      ctx.fillText("🖐️", x, y - 45);
+    if (p.getState("highfive")) {
+      ctx.font = "24px serif";
+      ctx.fillText("🖐️", p.getState("x") - 12, p.getState("y") - 30);
     }
   }
-}
 
-function loop() {
-  update();
-  draw();
   requestAnimationFrame(loop);
 }
 loop();
